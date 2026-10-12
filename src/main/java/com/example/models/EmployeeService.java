@@ -23,7 +23,7 @@ public class EmployeeService {
             return null;
         }
     }
-    public List<Employee> tryGetEmployees() throws SQLException {
+    private List<Employee> tryGetEmployees() throws SQLException {
         Connection con = database.connect();
         if (con == null) {
             System.out.println("No connection");
@@ -46,5 +46,63 @@ public class EmployeeService {
         }
         con.close();
         return empList;
+    }
+
+    public void createEmployee(Employee employee) {
+        try {
+            tryCreateEmployee(employee);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void tryCreateEmployee(Employee employee) throws SQLException {
+        Connection con = database.connect();
+        if (con == null) {
+            System.out.println("No connection");
+        }
+
+        String sql = "INSERT INTO employees (name, city, salary) VALUES ('" + employee.getName() + "', '" + employee.getCity() + "', " + employee.getSalary() + ")";
+        Statement statement = con.createStatement();
+        statement.executeUpdate(sql);
+        con.close();
+    }
+
+    public void deleteEmployee(int id) {
+        try {
+            tryDeleteEmployee(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void tryDeleteEmployee(int id) throws SQLException {
+        Connection con = database.connect();
+        if (con == null) {
+            System.out.println("No connection");
+        }
+        String sql = "DELETE FROM employees WHERE id=" + id;
+        Statement statement = con.createStatement();
+        statement.executeUpdate(sql);
+        con.close();
+    }
+
+    public void updateEmployee(Employee employee) {
+        try {
+            tryUpdateEmployee(employee);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void tryUpdateEmployee(Employee employee) throws SQLException {
+        Connection con = database.connect();
+        if (con == null) {
+            System.out.println("No connection");
+        }
+        String sql = "UPDATE employees SET name='" + employee.getName() + "', city='" + employee.getCity() + "', salary=" + employee.getSalary() + " WHERE id=" + employee.getId();
+        Statement statement = con.createStatement();
+        statement.executeUpdate(sql);
+        con.close();
     }
 }
